@@ -5,55 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Chamados Laurenti - Grupo Koch</title>
     <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --container-bg: #fff;
+            --text-color: #333;
+            --heading-color: #1a365d;
+            --border-color: #cbd5e0;
+            --label-color: #4a5568;
+            --self-btn-bg: #edf2f7;
+            --self-btn-hover: #e2e8f0;
+            --preview-bg: #f7fafc;
+            --preview-text-label: #2d3748;
+            --hr-color: #e2e8f0;
+            --input-bg: #fff;
+            --inline-copy-bg: #e2e8f0;
+            --inline-copy-hover: #cbd5e0;
+            --inline-copy-text: #4a5568;
+        }
+        
+        [data-theme="dark"] {
+            --bg-color: #1a202c;
+            --container-bg: #2d3748;
+            --text-color: #edf2f7;
+            --heading-color: #63b3ed;
+            --border-color: #4a5568;
+            --label-color: #cbd5e0;
+            --self-btn-bg: #4a5568;
+            --self-btn-hover: #718096;
+            --preview-bg: #1a202c;
+            --preview-text-label: #a0aec0;
+            --hr-color: #4a5568;
+            --input-bg: #1a202c;
+            --inline-copy-bg: #4a5568;
+            --inline-copy-hover: #718096;
+            --inline-copy-text: #edf2f7;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
         }
         .container {
-            max-width: 1100px;
+            max-width: 1150px;
             margin: 0 auto;
-            background: #fff;
+            background: var(--container-bg);
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative;
+            transition: background-color 0.3s;
+        }
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--hr-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
         h1 {
-            color: #1a365d;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 10px;
-            margin-top: 0;
+            color: var(--heading-color);
+            margin: 0;
+            font-size: 24px;
+        }
+        .btn-theme {
+            background-color: var(--self-btn-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn-theme:hover {
+            background-color: var(--self-btn-hover);
         }
         .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.1fr 0.9fr;
             gap: 25px;
-            margin-top: 20px;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 850px) {
             .grid { grid-template-columns: 1fr; }
         }
         label {
             font-weight: bold;
             display: block;
             margin-bottom: 5px;
-            color: #4a5568;
+            color: var(--label-color);
+            font-size: 14px;
         }
         select, input, textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #cbd5e0;
+            border: 1px solid var(--border-color);
             border-radius: 5px;
             box-sizing: border-box;
             font-size: 14px;
-            background-color: #fff;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         select:focus, input:focus, textarea:focus {
             outline: none;
             border-color: #3182ce;
             box-shadow: 0 0 0 3px rgba(49,130,206,0.2);
+        }
+        .row-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
         }
         .self-buttons {
             display: flex;
@@ -61,10 +132,17 @@
             gap: 8px;
             margin-top: 5px;
             margin-bottom: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            border-radius: 5px;
+            background: var(--input-bg);
         }
         .btn-self {
-            background-color: #edf2f7;
-            border: 1px solid #cbd5e0;
+            background-color: var(--self-btn-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
             padding: 8px 12px;
             border-radius: 4px;
             cursor: pointer;
@@ -73,7 +151,7 @@
             transition: all 0.2s;
         }
         .btn-self:hover {
-            background-color: #e2e8f0;
+            background-color: var(--self-btn-hover);
         }
         .btn-self.active {
             background-color: #3182ce;
@@ -81,19 +159,47 @@
             border-color: #2b6cb0;
         }
         .preview-box {
-            background-color: #f7fafc;
-            border: 1px dashed #cbd5e0;
+            background-color: var(--preview-bg);
+            border: 1px dashed var(--border-color);
             padding: 20px;
             border-radius: 6px;
-            position: relative;
         }
         .preview-item {
             margin-bottom: 12px;
             font-size: 14px;
+            line-height: 1.5;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
         }
-        .preview-item span {
+        .preview-content {
+            flex: 1;
+            word-break: break-word;
+        }
+        .preview-item span.label-span {
             font-weight: bold;
-            color: #2d3748;
+            color: var(--preview-text-label);
+        }
+        .btn-copy-inline {
+            background-color: var(--inline-copy-bg);
+            color: var(--inline-copy-text);
+            border: none;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            margin-top: 1px;
+        }
+        .btn-copy-inline:hover {
+            background-color: var(--inline-copy-hover);
+        }
+        .btn-copy-inline.copied {
+            background-color: #38a169;
+            color: white;
         }
         .btn-copy {
             background-color: #38a169;
@@ -118,6 +224,9 @@
             text-decoration: none;
             font-weight: 500;
         }
+        [data-theme="dark"] .link-portal {
+            color: #63b3ed;
+        }
         .link-portal:hover {
             text-decoration: underline;
         }
@@ -131,15 +240,22 @@
             text-align: center;
             font-weight: 500;
         }
+        [data-theme="dark"] .alert {
+            background-color: #22543d;
+            color: #c6f6d5;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Gerador de Dados para Chamado (Laurenti)</h1>
+    <div class="header-area">
+        <h1>Gerador de Chamados Laurenti (Zendesk) - Grupo Koch</h1>
+        <button class="btn-theme" id="theme-toggle" onclick="toggleTheme()">🌓 Modo Escuro</button>
+    </div>
     
     <div class="grid">
-        <!-- Formulário de Seleção -->
+        <!-- Formulário -->
         <div>
             <div style="margin-bottom: 15px;">
                 <label for="select-loja">1. Selecione a Loja:</label>
@@ -149,42 +265,105 @@
             </div>
             
             <div style="margin-bottom: 15px;">
-                <label>2. Selecione o Self Checkout / PDV:</label>
+                <label>2. Selecione o Número do Self (PDV):</label>
                 <div id="self-container" class="self-buttons">
-                    <span style="color:#718096; font-size:13px; italic;">Selecione uma loja primeiro.</span>
+                    <span style="color:#718096; font-size:13px; font-style: italic;">Selecione uma loja primeiro para listar os selfs.</span>
+                </div>
+            </div>
+
+            <div class="row-inputs">
+                <div>
+                    <label for="input-softdesk">3. N° Chamado Softdesk:</label>
+                    <input type="text" id="input-softdesk" placeholder="Ex: 184952" oninput="updatePreview()">
+                </div>
+                <div>
+                    <label for="select-equipamento">4. Equipamento com Defeito:</label>
+                    <select id="select-equipamento" onchange="updatePreview()">
+                        <option value="">-- Selecione o Componente --</option>
+                        <option value="Monitor">Monitor</option>
+                        <option value="Scanner">Scanner</option>
+                        <option value="Balança">Balança</option>
+                        <option value="Balança de conferencia">Balança de conferencia</option>
+                        <option value="Scanner de mão">Scanner de mão</option>
+                        <option value="Tampa">Tampa</option>
+                        <option value="Fonte">Fonte</option>
+                        <option value="Regua">Regua</option>
+                    </select>
                 </div>
             </div>
 
             <div style="margin-bottom: 15px;">
-                <label for="input-defeito">3. Descreva o Defeito / Solicitação:</label>
-                <textarea id="input-defeito" rows="4" placeholder="Ex: Balança de conferência oscilando ou com erro de peso..." oninput="updatePreview()"></textarea>
+                <label for="input-defeito">5. Descrição Detalhada do Problema:</label>
+                <textarea id="input-defeito" rows="4" placeholder="Adicione os detalhes técnicos sobre o problema ocorrido..." oninput="updatePreview()"></textarea>
             </div>
             
             <a href="https://laurentiepdltda.zendesk.com/hc/pt-br/requests/new" target="_blank" class="link-portal">🔗 Abrir Portal Laurenti Zendesk</a>
         </div>
         
-        <!-- Preview e Cópia -->
+        <!-- Preview -->
         <div>
-            <label>Visualização dos Dados (Pronto para copiar):</label>
+            <label>Estrutura Pronta para o Portal:</label>
             <div class="preview-box" id="preview-box">
-                <div class="preview-item"><span>Link do Portal:</span> https://laurentiepdltda.zendesk.com/hc/pt-br/requests/new</div>
-                <div class="preview-item"><span>Seu Email:</span> ti.suporte@grupokochsa.com.br</div>
-                <div class="preview-item"><span>Assunto:</span> <span id="view-assunto" style="font-weight:normal; color:#4a5568;">-</span></div>
-                <div class="preview-item"><span>Setor:</span> Assistencia tecnica</div>
-                <div class="preview-item"><span>Motivo:</span> Solicitação de atendimento corretivo:</div>
-                <hr style="border:0; border-top:1px solid #e2e8f0; margin:15px 0;">
-                <div class="preview-item"><span>EMPRESA*:</span> <span id="view-empresa" style="font-weight:normal; color:#4a5568;">-</span></div>
-                <div class="preview-item"><span>EQUIPAMENTO*:</span> Self Checkout</div>
-                <div class="preview-item"><span>NÚMERO DE SÉRIE:</span> <span id="view-serial" style="font-weight:normal; color:#4a5568;">-</span></div>
-                <div class="preview-item"><span>DEFEITO / SOLICITAÇÃO*:</span> <span id="view-defeito" style="font-weight:normal; color:#4a5568;">-</span></div>
-                <div class="preview-item"><span>ENDEREÇO EQUIPAMENTO*:</span> <span id="view-endereco" style="font-weight:normal; color:#4a5568;">-</span></div>
-                <div class="preview-item"><span>Bairro*:</span> <span id="view-bairro" style="font-weight:normal; color:#4a5568;">-</span></div>
-                <div class="preview-item"><span>Cidade*:</span> <span id="view-cidade" style="font-weight:normal; color:#4a5568;">-</span></div>
-                <div class="preview-item"><span>UF*:</span> <span id="view-uf" style="font-weight:normal; color:#4a5568;">-</span></div>
-                <div class="preview-item"><span>CEP*:</span> <span id="view-cep" style="font-weight:normal; color:#4a5568;">-</span></div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">Link do Portal:</span> <span id="val-link">https://laurentiepdltda.zendesk.com/hc/pt-br/requests/new</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('val-link', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">Email:</span> <span id="val-email">ti.suporte@grupokochsa.com.br</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('val-email', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">Assunto:</span> <span id="view-assunto" style="color:#3182ce; font-weight: 600;">-</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-assunto', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">Setor:</span> <span id="val-setor">Assistencia tecnica</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('val-setor', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">Motivo:</span> <span id="val-motivo">Solicitação de atendimento corretivo:</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('val-motivo', this)">Copiar</button>
+                </div>
+                <hr style="border:0; border-top:1px solid var(--hr-color); margin:12px 0;">
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">EMPRESA*:</span> <span id="view-empresa">-</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-empresa', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">EQUIPAMENTO*:</span> <span id="view-equip-name">Self Checkout</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-equip-name', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">NÚMERO DE SÉRIE:</span> <span id="view-serial">-</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-serial', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">DEFEITO / SOLICITAÇÃO*:</span> <span id="view-defeito">-</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-defeito', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">ENDEREÇO EQUIPAMENTO*:</span> <span id="view-endereco">-</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-endereco', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">Bairro*:</span> <span id="view-bairro">-</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-bairro', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">Cidade*:</span> <span id="view-cidade">-</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-cidade', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">UF*:</span> <span id="view-uf">-</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-uf', this)">Copiar</button>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-content"><span class="label-span">CEP*:</span> <span id="view-cep">-</span></div>
+                    <button class="btn-copy-inline" onclick="copyIndividual('view-cep', this)">Copiar</button>
+                </div>
             </div>
             
-            <button class="btn-copy" onclick="copyData()">📋 Copiar Dados em Texto</button>
+            <button class="btn-copy" onclick="copyData()">📋 Copiar Todos os Dados em Bloco</button>
             <div id="alert-success" class="alert">Dados copiados para a área de transferência!</div>
         </div>
     </div>
@@ -7420,7 +7599,29 @@
   }
 };
     
-    // Populate select
+    // Theme toggle function
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute("data-theme");
+        const btn = document.getElementById("theme-toggle");
+        
+        if (currentTheme === "dark") {
+            document.documentElement.removeAttribute("data-theme");
+            btn.textContent = "🌓 Modo Escuro";
+            localStorage.setItem("theme", "light");
+        } else {
+            document.documentElement.setAttribute("data-theme", "dark");
+            btn.textContent = "☀️ Modo Claro";
+            localStorage.setItem("theme", "dark");
+        }
+    }
+    
+    // Load preference
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        document.getElementById("theme-toggle").textContent = "☀️ Modo Claro";
+    }
+
+    // Populate select element with stores from spreadsheets
     const selectLoja = document.getElementById('select-loja');
     Object.keys(storesData).sort((a,b) => a - b).forEach(key => {
         const store = storesData[key];
@@ -7439,14 +7640,14 @@
         selectedPdv = null;
         
         if (!storeId) {
-            container.innerHTML = '<span style="color:#718096; font-size:13px; italic;">Selecione uma loja primeiro.</span>';
+            container.innerHTML = '<span style="color:#718096; font-size:13px; font-style: italic;">Selecione uma loja primeiro para listar os selfs.</span>';
             updatePreview();
             return;
         }
         
         const store = storesData[storeId];
-        if (store.selfs.length === 0) {
-            container.innerHTML = '<span style="color:#e53e3e; font-size:13px;">Nenhum self encontrado nesta loja na planilha.</span>';
+        if (!store.selfs || store.selfs.length === 0) {
+            container.innerHTML = '<span style="color:#e53e3e; font-size:13px;">Nenhum self checkout localizado para esta loja na planilha.</span>';
         } else {
             store.selfs.forEach(self => {
                 const btn = document.createElement('button');
@@ -7469,7 +7670,9 @@
 
     function updatePreview() {
         const storeId = selectLoja.value;
-        const defeito = document.getElementById('input-defeito').value;
+        const softdesk = document.getElementById('input-softdesk').value.trim();
+        const equipamentoDefeito = document.getElementById('select-equipamento').value;
+        const defeitoDetalhado = document.getElementById('input-defeito').value;
         
         if (!storeId) {
             clearPreview();
@@ -7479,19 +7682,33 @@
         const store = storesData[storeId];
         
         document.getElementById('view-empresa').textContent = store.nome;
-        document.getElementById('view-endereco').textContent = store.logradouro + ', ' + store.numero;
+        document.getElementById('view-endereco').textContent = store.logradouro + (store.numero ? ', ' + store.numero : '');
         document.getElementById('view-bairro').textContent = store.bairro;
-        document.getElementById('view-cidade').textContent = store.cidade || 'Tijucas';
+        document.getElementById('view-cidade').textContent = store.cidade;
         document.getElementById('view-uf').textContent = store.uf;
         document.getElementById('view-cep').textContent = store.cep;
-        document.getElementById('view-defeito').textContent = defeito || '-';
+        
+        // Full description includes softdesk and breakdown info
+        let descCompleta = '';
+        if (softdesk) descCompleta += 'Chamado Softdesk: ' + softdesk + '\n';
+        if (equipamentoDefeito) descCompleta += 'Componente com falha: ' + equipamentoDefeito + '\n';
+        descCompleta += 'Descrição do problema: ' + (defeitoDetalhado || 'Solicitação de manutenção corretiva.');
+        document.getElementById('view-defeito').textContent = descCompleta;
+        
+        // Dynamic subject rule calculation
+        let pdvStr = selectedPdv ? selectedPdv.pdv : '[Número do self]';
+        let componenteStr = equipamentoDefeito ? equipamentoDefeito : '[equipamento]';
+        let chamadoStr = softdesk ? ' (SD ' + softdesk + ')' : '';
+        
+        let assuntoCompleto = 'Manutenção Self ' + pdvStr + ' - ' + componenteStr + chamadoStr;
+        document.getElementById('view-assunto').textContent = assuntoCompleto;
         
         if (selectedPdv) {
-            document.getElementById('view-assunto').textContent = 'Manutenção Self ' + selectedPdv.pdv + ' - ' + (defeito || 'Manutenção Corretiva');
-            document.getElementById('view-serial').textContent = selectedPdv.serial || 'Não informado';
+            document.getElementById('view-serial').textContent = selectedPdv.serial || 'Não cadastrado';
+            document.getElementById('view-equip-name').textContent = selectedPdv.equip || 'Self Checkout';
         } else {
-            document.getElementById('view-assunto').textContent = 'Manutenção Self [Selecione o PDV]';
             document.getElementById('view-serial').textContent = '-';
+            document.getElementById('view-equip-name').textContent = 'Self Checkout';
         }
     }
 
@@ -7507,32 +7724,55 @@
         document.getElementById('view-cep').textContent = '-';
     }
 
+    function copyIndividual(elementId, buttonElement) {
+        const text = document.getElementById(elementId).textContent;
+        if (text === '-' || text === '') {
+            alert('Não há informação válida para copiar neste campo ainda.');
+            return;
+        }
+        
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = buttonElement.textContent;
+            buttonElement.textContent = 'Copiado!';
+            buttonElement.classList.add('copied');
+            setTimeout(() => {
+                buttonElement.textContent = originalText;
+                buttonElement.classList.remove('copied');
+            }, 2000);
+        }).catch(err => {
+            alert('Erro ao copiar: ' + err);
+        });
+    }
+
     function copyData() {
         const storeId = selectLoja.value;
         if (!storeId) {
             alert('Por favor, selecione uma loja primeiro.');
             return;
         }
+        if (!selectedPdv) {
+            alert('Por favor, selecione o número do Self (PDV).');
+            return;
+        }
         
         const store = storesData[storeId];
-        const defeito = document.getElementById('input-defeito').value || 'Manutenção Corretiva';
-        const pdvText = selectedPdv ? selectedPdv.pdv : '[Não selecionado]';
-        const serialText = selectedPdv ? selectedPdv.serial : '[Não selecionado]';
+        const assuntoText = document.getElementById('view-assunto').textContent;
+        const descText = document.getElementById('view-defeito').textContent;
         
         const textToCopy = `PORTAL DE CHAMADOS: https://laurentiepdltda.zendesk.com/hc/pt-br/requests/new
 Email: ti.suporte@grupokochsa.com.br
-Assunto: Manutenção Self ${pdvText} - ${defeito}
-Descrição: ${defeito}
+Assunto: ${assuntoText}
+Descrição: ${descText}
 Setor: Assistencia tecnica
 Motivo: Solicitação de atendimento corretivo:
 
 EMPRESA*: ${store.nome}
-EQUIPAMENTO*: Self Checkout
-NÚMERO DE SÉRIE: ${serialText}
-DEFEITO / SOLICITAÇÃO*: ${defeito}
-ENDEREÇO EQUIPAMENTO*: ${store.logradouro}, ${store.numero}
+EQUIPAMENTO*: ${selectedPdv.equip || 'Self Checkout'}
+NÚMERO DE SÉRIE: ${selectedPdv.serial || 'Não informado'}
+DEFEITO / SOLICITAÇÃO*: ${descText}
+ENDEREÇO EQUIPAMENTO*: ${store.logradouro}${store.numero ? ', ' + store.numero : ''}
 Bairro*: ${store.bairro}
-Cidade*: ${store.cidade || 'Tijucas'}
+Cidade*: ${store.cidade}
 UF*: ${store.uf}
 CEP*: ${store.cep}`;
 
@@ -7541,9 +7781,9 @@ CEP*: ${store.cep}`;
             alertBox.style.display = 'block';
             setTimeout(() => {
                 alertBox.style.display = 'none';
-            }, 3000);
+            }, 3500);
         }).catch(err => {
-            alert('Erro ao copiar texto: ' + err);
+            alert('Erro ao copiar: ' + err);
         });
     }
 </script>
